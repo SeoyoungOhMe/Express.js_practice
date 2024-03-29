@@ -15,9 +15,12 @@ Node.js + Express.js 웹사이트 만들기
 ## 💻 Getting Started
 ### Installation
 ```
-npm install express ejs body-parser pg express-session
+npm install express ejs body-parser pg express-session // + nodemon
 ```
 ### Production
+```
+npm start // package.json의 scripts에 "start": "nodemon app.js"를 추가함
+```
 ```
 node app.js
 ```
