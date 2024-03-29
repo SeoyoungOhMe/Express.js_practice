@@ -45,9 +45,11 @@ app.post('/contactProc', (req, res) => {
     const email = req.body.email;
     const memo = req.body.memo;
 
-    var sql = `insert into contact(name, phone, email, memo, regdate) values('${name}', '${phone}', '${email}', '${memo}', now() )`
+    var sql = `insert into contact(name,phone,email,memo,regdate) values( $1, $2, $3, $4, NOW() )`
 
-    db.query(sql, function (err, result){
+    var values = [name, phone, email, memo];
+
+    db.query(sql, values, function (err, result){
         if(err) throw err;
         console.log("자료 1개를 삽입했습니다.");
         res.send("<script> alert('문의사항이 등록되었습니다.'); location.href='/'; </script>")
@@ -75,6 +77,31 @@ app.get('/contactDelete', (req, res) => {
         if(err) throw err;
         res.send("<script> alert('삭제돠었습니다.'); location.href='/contactList'; </script>")
     })
+})
+
+app.get('/login', (req, res) => {
+    res.render('login')
+})
+
+app.post('/loginProc', (req, res) => {
+    const user_id = req.body.user_id;
+    const pw = req.body.pw;
+
+    var sql = `SELECT * FROM member WHERE user_id=$1 AND pw=$2`
+
+    var values = [user_id, pw];
+
+    db.query(sql, values, function (err, result){
+        if(err) throw err;
+
+        if(result.rows.length == 0){
+            res.send("<script> alert('존재하지 않는 아이디입니다.'); location.href='/login'; </script>")
+        } else{
+            res.send(result.rows)
+        }
+        
+    })
+
 })
 
 
