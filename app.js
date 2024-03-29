@@ -4,6 +4,7 @@ const app = express()
 const port = 3000
 var bodyParser = require('body-parser')
 const pg = require('pg')  // import pg from 'pg' 와 동일 (ES6 모듈 -> CommonJS 모듈 사용)
+var session = require('express-session')
 
 const db = new pg.Client({
     user: "postgres",
@@ -22,8 +23,26 @@ app.use(bodyParser.urlencoded({ extended: false })) // bodyparser 사용을 위�
 
 app.use(express.static(__dirname + '/public')) // 정적 파일 제공
 
+app.use(session({ secret: 'osy', cookie: { maxAge: 60000 }, resave : true, saveUninitialized : true }))
+
+app.use((req, res, next) => {
+
+    res.locals.user_id="";
+    res.locals.name="";
+
+    if(req.session.member){
+        res.locals.user_id = req.session.member.user_id
+        res.locals.name = req.session.member.name
+    }
+
+    next()
+})
+
 // 라우팅 
 app.get('/', (req, res) => {
+
+    console.log(req.session.member);
+
     res.render('index')  // ./views/index.ejs
 })
 
@@ -97,11 +116,22 @@ app.post('/loginProc', (req, res) => {
         if(result.rows.length == 0){
             res.send("<script> alert('존재하지 않는 아이디입니다.'); location.href='/login'; </script>")
         } else{
-            res.send(result.rows)
+            console.log(result.rows)
+
+            req.session.member = result.rows[0]
+            res.send("<script> alert('로그인 되었습니다.'); location.href='/'; </script>")
+
+            // res.send(result.rows)
         }
         
     })
 
+})
+
+app.get('/logout', (req, res) => {
+
+    req.session.member = null
+    res.send("<script> alert('로그아웃 되었습니다.'); location.href='/'; </script>")
 })
 
 
