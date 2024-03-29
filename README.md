@@ -1,5 +1,6 @@
 # Express.js_practice
 
+
 ## 📖 Description
 Node.js + Express.js 웹사이트 만들기     
 
@@ -35,9 +36,9 @@ Express.js_practice
 ├─ package-lock.json
 ├─ package.json
 ├─ public
-│  ├─ img
-│  │  └─ mark2.jpeg
-│  └─ mark.jpg
+│  └─ img
+│     ├─ 59_1.png
+│     └─ 59_2.webp
 └─ views
    ├─ contact.ejs
    ├─ contactList.ejs
@@ -52,3 +53,4 @@ Express.js_practice
 
 ## Ref
 https://www.youtube.com/playlist?list=PLLtzrE3hP5ST8nyMyVACCdcwmjxx8CATm
+
